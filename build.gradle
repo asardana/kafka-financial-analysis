@@ -1,4 +1,4 @@
-group 'com.kafka.financial'
+group 'com.financial.analysis.kafka'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'

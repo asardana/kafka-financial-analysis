@@ -1,4 +1,4 @@
-package com.kafka.financial;
+package com.financial.analysis.kafka;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -40,6 +40,7 @@ public class LoanDataKafkaConsumer {
 
         while(true){
 
+            // Kafka Consumer polls the Topic every 5 seconds to get the new messages
             final ConsumerRecords<String, String> loanRecords = loanDataConsumer.poll(5000);
 
             loanRecords.forEach(loanRecord -> {

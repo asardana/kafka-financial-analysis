@@ -1,4 +1,4 @@
-package com.kafka.financial;
+package com.financial.analysis.kafka;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 /**
  * Created by Aman on 10/21/2017.
  */
-public class LoanDataKafkaProducer {
+    public class LoanDataKafkaProducer {
 
     private static String kafkaBrokerEndpoint = null;
     private static String loanDataStatsInputFile = null;
