@@ -56,6 +56,7 @@ import java.util.stream.Stream;
             // Read the input file as a stream of lines
             Stream<String> loanDataFileStream = Files.lines(Paths.get(loanDataStatsInputFile));
 
+            long start = System.currentTimeMillis();
             // Convert each line of record to a Kafka Producer Record
             // Generate a Random UUID for the key. Value is line of loan record in JSON format
             loanDataFileStream.forEach(line -> {
@@ -63,6 +64,12 @@ import java.util.stream.Stream;
                 final ProducerRecord<String, String> loanRecord =
                         new ProducerRecord<String, String>(loanDataIngestTopic, UUID.randomUUID().toString(), line);
 
+                // Adding some delay to allow the records to stream for few seconds
+                try {
+                    Thread.currentThread().sleep(0, 1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 // Send the loan record to Kafka Broker in Async mode. Callback is called after the record receiving the acknowledgement from broker
                 loanDataProducer.send(loanRecord, ((metadata, exception) -> {
 
@@ -77,8 +84,11 @@ import java.util.stream.Stream;
             });
             try {
 
-                // Wait for 20 seconds to get the records processed before proceeding further with the processing
-                countDownLatch.await(20, TimeUnit.SECONDS);
+                long end = System.currentTimeMillis();
+                // Wait for 10 seconds to get any pending records processed before proceeding further with the processing
+                countDownLatch.await(10, TimeUnit.SECONDS);
+                System.out.println("Published all the Loan Stat Records to Kafka Broker!");
+                System.out.println("Time Taken to publish Loan Stats " + ((end - start) / 1000) + " seconds");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
